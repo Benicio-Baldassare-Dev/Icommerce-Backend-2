@@ -1,23 +1,23 @@
-import { accountModel } from "../model/account.model.js"
+import { productModel } from "../model/product.model.js"
 
 const getAll = async () => {
-    return await accountModel.find();
+    return await productModel.find();
 }
 
-const getOne= async (ask) => {
-    return await accountModel.findOne(ask);
+const getOne = async (ask) => {
+    return await productModel.findOne(ask);
 }
 
 const create = async (data) => {
-    return await accountModel.create(data) 
+    return await productModel.create(data) 
 }
 
 const update = async (id, data) => {
-    return await accountModel.findByIdAndUpdate(id, data, {new: true});
+    return await productModel.findByIdAndUpdate(id, data, {new: true});
 }
 
 const deleteOne = async (id) => {
-    return await accountModel.findByIdAndDelete(id);
+    return await productModel.findByIdAndDelete(id);
 }
 
 

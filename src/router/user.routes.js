@@ -3,12 +3,14 @@ import userDao from "../dao/user.dao.js";
 import { createHash, isValidPassword } from "../utils/hashPassword.js";
 import accountDao from "../dao/account.dao.js";
 import { createToken } from "../utils/jwt.js";
+import { cartDao } from "../dao/cart.dao.js";
+
 
 const router = Router();
 
 router.post('/register', async (req, res) => {
     try {
-        const {name, lastName, email, password} = req.body;
+        const {first_name, lastName, email, age, password, role} = req.body;
         
         const user = await userDao.getOne({email});
         
@@ -17,18 +19,24 @@ router.post('/register', async (req, res) => {
         // creamos la cuenta del usuario
             const newAccount = {
                 number: Math.floor(Math.random() * 1000000000),
-                alias: `${name.toLowerCase()}${lastName.toLowerCase()}.${Math.floor(Math.random() * 1000)}`,
+                alias: `${first_name.toLowerCase()}${lastName.toLowerCase()}.${Math.floor(Math.random() * 1000)}`,
                 wallet: 0,
             }
 
             const account = await accountDao.create(newAccount);
 
+            const newCart = await cartDao.create();
+
+
             const newUser = {
-                name,
+                first_name,
                 lastName,
                 email,
+                age,
                 password: createHash(password),
-                account: account._id
+                account: account._id,
+                role,
+                cart: newCart._id
             }
 
             const createUser = await userDao.create(newUser);

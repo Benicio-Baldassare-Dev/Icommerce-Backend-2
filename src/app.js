@@ -1,7 +1,7 @@
-import express, { json } from 'express'
+import express, { json } from 'express';
 import { connectDB } from './config/mongoDB.config.js';
-import routes from './router/index.routes.js'
-import 'dotenv/config'
+import routes from './router/index.routes.js';
+import 'dotenv/config';
 
 const app = express();
 connectDB(); 
