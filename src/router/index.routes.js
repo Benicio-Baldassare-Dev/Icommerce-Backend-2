@@ -7,6 +7,5 @@ const router = Router();
 
 router.use("/sessions", userRoutes);
 router.use("/product", accountRoutes);
-// router.use("/sessions", currentRoutes);
 
 export default router;
