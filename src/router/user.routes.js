@@ -59,7 +59,7 @@ router.post("/login", async (req, res) => {
         if(!user || !isValidPassword(password, user)) return res.status(401).json({ error: 'Email o contraseña no validos' });
 
         const token = createToken(user);
-        res.cookie("token", token);
+        res.cookie("token", token, { httpOnly: true });
 
         res.status(200).json({ status: 'ok', payload: user });
         
@@ -68,5 +68,19 @@ router.post("/login", async (req, res) => {
         res.status(500).json({ error: "Internal Server Error"});
     }
 })
+
+router.get("/current", async (req, res) => {
+    // const token = req.headers.authorization.split(" ")[1];
+    const token = req.cookies.token;
+  
+    const validToken = verifyToken(token);
+    if (!validToken) return res.send("Not token");
+  
+    const user = await userDao.getByEmail(validToken.email);
+  
+    res.json({ status: "ok", user: req.user });
+  });
+
+
 
 export default router;
