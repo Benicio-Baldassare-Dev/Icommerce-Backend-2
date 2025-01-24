@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
         
         if(user) return res.status(401).json({error: '¡Este mail ya esa en uso!'});
 
-        // creamos la cuenta del usuario
+        // creamos la cuenta del user
             const newAccount = {
                 number: Math.floor(Math.random() * 1000000000),
                 alias: `${first_name.toLowerCase()}${lastName.toLowerCase()}.${Math.floor(Math.random() * 1000)}`,
