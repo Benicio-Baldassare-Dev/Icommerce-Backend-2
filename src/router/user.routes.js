@@ -2,9 +2,11 @@ import { Router } from "express";
 import userDao from "../dao/user.dao.js";
 import { createHash, isValidPassword } from "../utils/hashPassword.js";
 import accountDao from "../dao/account.dao.js";
-import { createToken } from "../utils/jwt.js";
+import { createToken, verifyToken } from "../utils/jwt.js";
 import { cartDao } from "../dao/cart.dao.js";
-
+import { passportCall } from "../middlewares/passportCall.middelware.js";
+import { authorization } from "../middlewares/authorization.middleware.js";
+import passport from "passport";
 
 const router = Router();
 
@@ -70,18 +72,12 @@ router.post("/login", async (req, res) => {
 })
 
 
-router.get("/current", async (req, res) => {
-    // const token = req.headers.authorization.split(" ")[1];
-    const token = req.cookies.token;
-  
-    const validToken = verifyToken(token);
-    if (!validToken) return res.send("Not token");
-  
-    const user = await userDao.getByEmail(validToken.email);
-  
-    res.json({ status: "ok", user: req.user });
+router.get("/current", passportCall("jwt"), authorization("user"), async (req, res) => {
+    try {
+        res.status(200).json({ status: 'success', user: req.user })
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
   });
-
-
 
 export default router;
